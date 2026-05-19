@@ -7,7 +7,8 @@ export default function Err404() {
         <div>PAGE NOT FOUND.</div>
       </div>
       <div className="w-full mt-6 text-center items-center">
-        <a href="/" className="text-on-primary-container hover:text-primary-container hover:underline decoration-2 underline-offset-8">
+        {/* <a href="/" className="text-on-primary-container hover:text-primary-container hover:underline decoration-2 underline-offset-8"> */}
+        <a href="/" className="text-primary-container/75 hover:text-primary-container tracking-wider">
           Go Home page
         </a>
       </div>
