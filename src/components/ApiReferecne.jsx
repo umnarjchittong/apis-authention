@@ -164,7 +164,7 @@ export default function ApiReference() {
                         </h3>
                         <div className="flex items-center gap-2 bg-surface-container-lowest p-3 rounded-lg border border-outline-variant">
                             <code className="text-xs text-on-surface-variant">
-                                https://api.nexusapi.com/v1
+                                https://apis.mju.ac.th.com/v1
                             </code>
                         </div>
                     </div>

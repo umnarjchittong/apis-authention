@@ -72,7 +72,7 @@
 
 @layer components {
   .glass-panel {
-    @apply bg-surface-container/80 backdrop-blur-xl border border-outline-variant/30;
+    @apply bg-surface-container/98 backdrop-blur-xl border border-outline-variant/30;
   }
   
   .neon-glow-primary {
@@ -128,4 +128,8 @@ html {
 
 body {
     margin: 0;
+}
+
+button {
+    @apply cursor-pointer;
 }

@@ -10,6 +10,7 @@ import {
     Send,
 } from "lucide-react";
 import { motion } from "motion/react";
+import { UseApp } from "../providers/AppContext";
 
 const categories = [
     {
@@ -54,11 +55,12 @@ const faqs = [
 ];
 
 export default function Support() {
+    const { appTitle } = UseApp();
     return (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="mb-12">
                 <h1 className="text-5xl font-bold text-on-surface mb-4 tracking-tight">
-                    Support Engineering
+                    {appTitle} Support Engineering
                 </h1>
                 <p className="text-on-surface-variant max-w-2xl text-lg leading-relaxed">
                     Stuck on an integration? Our engineering team is standing by
@@ -196,7 +198,7 @@ export default function Support() {
                                     <div className="flex items-center gap-3">
                                         {/* <Github className="w-5 h-5" /> */}GH
                                         <span className="text-sm font-mono">
-                                            nexus-core-repo
+                                            {appTitle}-core-repo
                                         </span>
                                     </div>
                                     <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />

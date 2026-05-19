@@ -25,7 +25,7 @@ export default function App() {
       <Header activePage={activePage} onNavigate={setActivePage} />
       <Sidebar activePage={activePage} onNavigate={setActivePage} />
       
-      <main className="md:pl-[240px] pt-16 min-h-screen shadow-2xl">
+      <main className="md:pl-60 pt-16 min-h-screen shadow-2xl">
         <div className="max-w-6xl mx-auto px-margin py-12">
           {activePage === 'tokens' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
