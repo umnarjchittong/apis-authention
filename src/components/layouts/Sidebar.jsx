@@ -1,4 +1,4 @@
-import { Terminal, Key, FileText, Code, LifeBuoy, Cpu, LogOut } from 'lucide-react';
+import { Terminal, Key, FileText, Code, LifeBuoy, Cpu, LogOut, Target } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const navItems = [
@@ -9,8 +9,8 @@ const navItems = [
 ];
 
 const bottomItems = [
-  { icon: Cpu, label: 'System Status' },
-  { icon: LogOut, label: 'Log Out', danger: true },
+  { icon: Cpu, label: 'System Status', url: 'https://kuma.mju.ac.th/status/apis', target: '_blank' },
+  { icon: LogOut, label: 'Log Out', url: './logout', target: '_self', danger: true },
 ];
 
 export default function Sidebar() {
@@ -53,6 +53,8 @@ export default function Sidebar() {
             className={`flex items-center gap-base px-gutter py-3 cursor-pointer transition-all duration-200 group ${
               item.danger ? 'text-on-surface-variant hover:text-error' : 'text-on-surface-variant hover:text-on-surface'
             }`}
+            href={item.url}
+            target={item.target}
           >
             <item.icon className="w-5 h-5" />
             <span className="text-sm font-medium">{item.label}</span>

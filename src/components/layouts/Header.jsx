@@ -91,7 +91,7 @@ export default function Header({ activePage, onNavigate }) {
     <header className="bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 fixed top-0 z-50 flex justify-between items-center w-full px-margin h-16">
       <div className="flex items-center gap-gutter">
         <span 
-          onClick={() => onNavigate('tokens')}
+          onClick={() => onNavigate('/')}
           className="text-2xl font-bold tracking-tighter text-primary cursor-pointer"
         >
           {appTitle} Auth
