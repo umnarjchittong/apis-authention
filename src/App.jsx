@@ -1,122 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+/**
+ * @license
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-function App() {
-  const [count, setCount] = useState(0)
+import { useState } from 'react';
+import Header from './components/layouts/Header';
+import Sidebar from './components/layouts/Sidebar';
+import RegistrationForm from './components/forms/RegistrationForm';
+import SidebarWidgets from './components/SidebarWidgets';
+import SuccessModal from './components/SuccessModal';
+import ApiReference from './components/ApiReferecne';
+import Documentation from './components/Documentation';
+import Support from './components/Support';
+import SecurityLogs from './components/SecurityLogs';
+
+// import './assets/app.css';
+
+export default function App() {
+  const [activePage, setActivePage] = useState('tokens');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="min-h-screen bg-surface">
+      <Header activePage={activePage} onNavigate={setActivePage} />
+      <Sidebar activePage={activePage} onNavigate={setActivePage} />
+      
+      <main className="md:pl-60 pt-16 min-h-screen shadow-2xl">
+        <div className="max-w-6xl mx-auto px-margin py-12">
+          {activePage === 'tokens' && (
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+              {/* Heading Section */}
+              <div className="mb-12">
+                <h1 className="text-5xl font-bold text-on-surface mb-2 tracking-tight">
+                  Register for API Access
+                </h1>
+                <p className="text-on-surface-variant max-w-2xl text-lg leading-relaxed">
+                  Fill out the details below to generate your secure API token. Our systems use advanced encryption to protect your environment credentials.
+                </p>
+              </div>
 
-      <div className="ticks"></div>
+              {/* Grid Layout */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-gutter items-start">
+                <RegistrationForm onGenerate={() => setIsModalOpen(true)} />
+                <SidebarWidgets />
+              </div>
+            </div>
+          )}
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
+          {activePage === 'api' && <ApiReference />}
+          {activePage === 'docs' && <Documentation />}
+          {activePage === 'support' && <Support />}
+          {activePage === 'security-logs' && <SecurityLogs />}
+          
+          {['status', 'logout'].includes(activePage) && (
+            <div className="flex flex-col items-center justify-center py-24 text-center">
+              <div className="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-6 border border-outline-variant/30">
+                <span className="text-2xl">⏳</span>
+              </div>
+              <h2 className="text-2xl font-bold mb-2">Module Under Development</h2>
+              <p className="text-on-surface-variant">The {activePage} module is being provisioned in the global cluster.</p>
+              <button 
+                onClick={() => setActivePage('tokens')}
+                className="mt-8 text-primary hover:underline font-mono text-sm"
+              >
+                &lt; Return to Tokens
+              </button>
+            </div>
+          )}
         </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      </main>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      <SuccessModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
+    </div>
+  );
 }
-
-export default App

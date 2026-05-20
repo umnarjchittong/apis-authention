@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+    --font-display: "Prompt", sans-serif;
+    --color-mountain-50: rgb(231, 255, 246);
+    --color-mountain-100: rgb(117, 255, 200);
+    --color-mountain-200: rgb(80, 247, 181);
+    --color-mountain-300: rgb(85, 227, 169);
+    --color-mountain-400: rgb(88, 214, 161);
+    --color-mountain-500: rgb(82, 189, 143);
+    --color-mountain-600: rgb(70, 156, 118);
+    --color-mountain-700: rgb(52, 117, 89);
+    --color-mountain-800: rgb(31, 76, 56);
+    --color-mountain-900: rgb(9, 33, 23);
+    --color-text: #9ca3af;
+    --color-text-w: #f3f4f6;
+    --color-bg: #16171d;
+    --color-border: #2e303a;
+    --color-code-bg: #1f2028;
+    --color-accent: rgb(70, 156, 118);
+    --color-accent-bg: rgba(70, 156, 118, 0.15);
+    --color-accent-border: rgba(70, 156, 118, 0.5);
+}
+
+#root {
+    width: 1126px;
+    max-width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    border-inline: 1px solid var(--color-border);
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    font-size: 16px;
+    --shadow:
+        rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+
+    letter-spacing: 0.18px;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Width of the scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Style the track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+/* Style the thumb */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1; /* creates padding effect */
+}
+
+/* Hover effect on thumb */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+html {
+    @apply font-display font-medium text-base bg-bg text-text;
+}
+
+body {
+    margin: 0;
+}
