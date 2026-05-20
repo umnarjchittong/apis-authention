@@ -55,7 +55,7 @@ export default function Header({ activePage, onNavigate }) {
   const [selectedNotification, setSelectedNotification] = useState(null);
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [notifications, setNotifications] = useState(mockNotifications);
-  const { appTitle} = UseApp();
+  const { appTitle, navItems } = UseApp();
   const navigate = useNavigate();
   
   const menuRef = useRef(null);
@@ -97,12 +97,7 @@ export default function Header({ activePage, onNavigate }) {
           {appTitle} Auth
         </span>
         <nav className="hidden md:flex gap-margin">
-          {[
-            { id: 'tokens', label: 'Tokens' },
-            { id: 'docs', label: 'Documentation' },
-            { id: 'api', label: 'API Reference' },
-            { id: 'support', label: 'Support' },
-          ].map((item) => (
+          {navItems.map((item) => (
             <a
               key={item.id}
               onClick={() => onNavigate(item.id)}
