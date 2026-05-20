@@ -9,7 +9,7 @@ const basePath = import.meta.env.VITE_BASE_PATH || "/";
 
 import { AppProvider } from "./providers/AppContext.jsx";
 import Err404 from "./errors/Error404.jsx";
-import MjuSsoLogin from "./services/mjuSso.jsx";
+// import MjuSsoLogin from "./services/mjuSso.jsx";
 import { CookiesProvider } from "react-cookie";
 
 const router = createBrowserRouter(
@@ -19,7 +19,7 @@ const router = createBrowserRouter(
             element: <Err404 />,
         },
         {
-            path: "/",
+            path: "",
             element: <App />,
         },
         // {
