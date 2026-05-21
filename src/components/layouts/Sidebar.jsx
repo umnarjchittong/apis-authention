@@ -1,6 +1,7 @@
 import { Terminal, Cpu, LogOut } from "lucide-react";
 import { motion } from "motion/react";
 import { UseApp } from "../../providers/AppContext";
+import { UseAuth } from "../../providers/AuthContext";
 
 const bottomItems = [
     {
@@ -20,6 +21,7 @@ const bottomItems = [
 
 export default function Sidebar({ activePage, onNavigate }) {
     const { navItems } = UseApp();
+    const { memberInfo } = UseAuth();
     return (
         <aside className="bg-surface-container-lowest fixed left-0 top-0 h-full w-60 z-40 border-r border-outline-variant/20 hidden md:flex flex-col pt-20 pb-margin justify-between">
             <div className="flex flex-col">
@@ -40,22 +42,28 @@ export default function Sidebar({ activePage, onNavigate }) {
                 </div>
 
                 <nav className="flex flex-col">
-                    {navItems.map((item) => (
-                        <a
-                            key={item.label}
-                            onClick={() => onNavigate(item.id)}
-                            className={`flex items-center gap-base px-gutter py-3 cursor-pointer transition-all duration-200 border-l-4 ${
-                                activePage === item.id
-                                    ? "text-primary bg-primary/5 border-primary font-bold"
-                                    : "text-on-surface-variant border-transparent hover:bg-surface-variant/50 hover:text-on-surface"
-                            }`}
-                        >
-                            <item.icon className="w-5 h-5" />
-                            <span className="text-sm font-medium">
-                                {item.label}
-                            </span>
-                        </a>
-                    ))}
+                    {navItems?.map((item) => {
+                        if (item.authenticated && !memberInfo) {
+                            return null; // Skip rendering if authentication is required but user is not authenticated}
+                        } else {
+                            return (
+                                <a
+                                    key={item.label}
+                                    onClick={() => onNavigate(item.id)}
+                                    className={`flex items-center gap-base px-gutter py-3 cursor-pointer transition-all duration-200 border-l-4 ${
+                                        activePage === item.id
+                                            ? "text-primary bg-primary/5 border-primary font-bold"
+                                            : "text-on-surface-variant border-transparent hover:bg-surface-variant/50 hover:text-on-surface"
+                                    }`}
+                                >
+                                    <item.icon className="w-5 h-5" />
+                                    <span className="text-sm font-medium">
+                                        {item.label}
+                                    </span>
+                                </a>
+                            );
+                        }
+                    })}
                 </nav>
             </div>
 

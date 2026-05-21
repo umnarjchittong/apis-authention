@@ -1,0 +1,74 @@
+[
+    {
+        "api_endpoint": "ICT",
+        "api_url": "https://apis.mju.ac.th/app/ict/"
+    },
+    {
+        "api_endpoint": "APIs Authention",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "PRNews",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "Activity",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "Library",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "Faculty",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "API-Person",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "Telegram",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "Student",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "StudentID",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "Students",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "Program",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "Person",
+        "api_url": "https://apis.mju.ac.th/"
+    },
+    {
+        "api_endpoint": "ICT-Student",
+        "api_url": "https://apis.mju.ac.th/app/ict/student"
+    },
+    {
+        "api_endpoint": "ICT-Faculty",
+        "api_url": "https://apis.mju.ac.th/app/ict/faculty"
+    },
+    {
+        "api_endpoint": "API-Student",
+        "api_url": ""
+    },
+    {
+        "api_endpoint": "API-Survey",
+        "api_url": ""
+    },
+    {
+        "api_endpoint": "API-Research",
+        "api_url": ""
+    }
+]

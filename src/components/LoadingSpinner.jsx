@@ -3,7 +3,7 @@ import { Bars } from "react-loader-spinner";
 
 const showConsole =
     import.meta.env.VITE_APP_SHOW_CONSOLE === "true" ? true : false;
-const themeColor = import.meta.env.VITE_APP_THEME_COLOR || "#2E8B57";
+const themeColor = import.meta.env.VITE_APP_THEME_COLOR || "#10B981";
 
 export default function LoadingSpinner({ dataLoading, page, debug, children }) {
     // const dataLoading = props.dataLoading;

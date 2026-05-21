@@ -9,8 +9,9 @@ const basePath = import.meta.env.VITE_BASE_PATH || "/";
 
 import { AppProvider } from "./providers/AppContext.jsx";
 import Err404 from "./errors/Error404.jsx";
-// import MjuSsoLogin from "./services/mjuSso.jsx";
+import MjuSsoLogin from "./services/mjuSso.jsx";
 import { CookiesProvider } from "react-cookie";
+import { AuthProvider } from "./providers/AuthContext.jsx";
 
 const router = createBrowserRouter(
     [
@@ -22,20 +23,22 @@ const router = createBrowserRouter(
             path: "",
             element: <App />,
         },
-        // {
-        //     path: "/login",
-        //     element: <MjuSsoLogin />,
-        // },
+        {
+            path: "/login",
+            element: <MjuSsoLogin />,
+        },
     ],
     { basename: basePath },
 );
 
 createRoot(document.getElementById("root")).render(
-    <StrictMode>
+    // <StrictMode>
         <CookiesProvider>
             <AppProvider>
+                <AuthProvider>
                 <RouterProvider router={router} />
+                </AuthProvider>
             </AppProvider>
         </CookiesProvider>
-    </StrictMode>,
+    // </StrictMode>,
 );
