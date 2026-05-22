@@ -5,6 +5,7 @@ import { useNavigate } from "react-router";
 import Swal from "sweetalert2";
 import { useEffect } from "react";
 import axios from "axios";
+import {swalAlert} from "../../services/SweetAlert";
 
 // import apiEndpoints from "../../assets/JSON/api_endpoint.json";
 
@@ -135,16 +136,13 @@ export default function RegistrationForm({ onGenerate }) {
                     // alert("Please log in to generate a token.");
                     // window.location.replace("./login");
                     // navigate("/login");
-                    Swal.fire({
+                    swalAlert({
                         title: "โปรดเข้าระบบด้วย MJUSSO",
                         text: "คุณต้องเข้าระบบก่อนใช้งาน",
                         icon: "info",
                         confirmButtonText: "ไปยังหน้าล็อกอิน",
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            // window.location.replace("./login");
-                            navigate("./login");
-                        }
+                        url: "./login",
+                        onClick: () => navigate("./login"),
                     });
                 }
             }}

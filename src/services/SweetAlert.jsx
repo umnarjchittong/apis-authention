@@ -66,6 +66,42 @@ export const toastAlert = ({
     });
 };
 
+export const swalAlert = ({
+    icon = "success",
+    title = "An error occurred",
+    text = "",
+    url = "",
+    onClick = null,
+    log_title = "",
+    log_method = "",
+    log_status = "",
+    log_detail = "",
+    log_meta = "",
+    log_user = "",
+}) => {
+    if (log_title && log_method && log_status) {
+        createLog({
+            title: log_title,
+            method: log_method,
+            status: log_status,
+            detail: log_detail,
+            meta: log_meta,
+            user: log_user,
+        });
+    }
+    return Swal.fire({
+        theme: 'light',
+        icon: icon,
+        title: title,
+        text: text,
+    }).then(() => {
+        if (url) {
+            onClick && onClick();
+            window.location.href = url;
+        }
+    });
+};
+
 export const alertError = ({
     title = "An error occurred",
     text = "",

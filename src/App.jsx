@@ -15,12 +15,23 @@ import TokenLists from "./components/TokenLists";
 export default function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { activePage, setActivePage } = UseApp();
-    const { endpointStatus, responseTime, tokenCreated, tokenCreatedClear, apiEndpoints, reloadApiEndpoints, reloadMemberInfo } =
-        UseAuth();
+    const {
+        endpointStatus,
+        responseTime,
+        tokenCreated,
+        tokenCreatedClear,
+        apiEndpoints,
+        reloadApiEndpoints,
+        reloadMemberInfo,
+    } = UseAuth();
 
-    if (responseTime?.apis === undefined || responseTime?.sandbox === undefined) {
+    if (
+        responseTime?.apis === undefined ||
+        responseTime?.sandbox === undefined
+    ) {
         endpointStatus && endpointStatus("apis", "https://apis.mju.ac.th");
-        endpointStatus && endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
+        endpointStatus &&
+            endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
     }
 
     const handleSetActivePage = (page) => {
@@ -29,14 +40,16 @@ export default function App() {
             reloadMemberInfo();
             window.location.reload();
         } else if (page === "security-logs") window.location.reload();
-    }
+    };
 
     useEffect(() => {
         const checkEndpoints = () => {
-          if (activePage === "home") {
-            endpointStatus && endpointStatus("apis", "https://apis.mju.ac.th");
-            endpointStatus && endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
-          }
+            if (activePage === "home") {
+                endpointStatus &&
+                    endpointStatus("apis", "https://apis.mju.ac.th");
+                endpointStatus &&
+                    endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
+            }
         };
 
         // checkEndpoints();
@@ -46,11 +59,9 @@ export default function App() {
         return () => clearInterval(interval);
     }, [endpointStatus, responseTime, activePage]);
 
-    useEffect(() => {
-        if (activePage === "home" && !apiEndpoints) {
-            reloadApiEndpoints();
-        }
-    }, [activePage, apiEndpoints, reloadApiEndpoints]);
+    if (activePage === "home" && !apiEndpoints) {
+        reloadApiEndpoints();
+    }
 
     return (
         <div className="min-h-screen bg-surface">
