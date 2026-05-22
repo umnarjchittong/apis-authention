@@ -1,10 +1,6 @@
 import {
-    Copy,
     ChevronRight,
     Database,
-    Globe,
-    Lock,
-    Clock,
     Search,
     Trash2,
     DatabaseSearch,
@@ -13,55 +9,9 @@ import {
 import { motion } from "motion/react";
 import { UseAuth } from "../providers/AuthContext";
 import { useState } from "react";
+import { confirmationDialog } from "../services/SweetAlert";
 
-const endpoints = [
-    {
-        method: "GET",
-        path: "/v1/tokens",
-        description: "List all active tokens for the authenticated user.",
-        auth: "Required",
-    },
-    {
-        method: "POST",
-        path: "/v1/tokens/generate",
-        description:
-            "Generate a new secure API token with specified permissions.",
-        auth: "Required",
-    },
-    {
-        method: "DELETE",
-        path: "/v1/tokens/{id}",
-        description: "Instantly revoke and destroy an existing token.",
-        auth: "Required",
-    },
-    {
-        method: "GET",
-        path: "/v1/usage",
-        description: "Retrieve real-time usage metrics and rate limit status.",
-        auth: "Required",
-    },
-];
-
-const codeExample = `// Request Example
-curl -X POST https://api.nexusapi.com/v1/tokens/generate \\
-  -H "Authorization: Bearer YOUR_TOKEN" \\
-  -H "Content-Type: application/json" \\
-  -d '{
-    "name": "Production Server",
-    "scopes": ["read", "write"]
-  }'
-
-// Response Example (200 OK)
-{
-  "status": "success",
-  "data": {
-    "token": "nx_live_83k92m1_v92m...",
-    "created_at": "2024-05-19T08:24Z",
-    "expires_at": null
-  }
-}`;
-
-const TokenListsTable = ({ filter, tokens, handleTokenCount }) => {
+const TokenListsTable = ({ filter, tokens, handleTokenCount, handleDelete }) => {
     let results = filter
         ? tokens?.filter((token) =>
               token.site_name.toLowerCase().includes(filter.toLowerCase()),
@@ -105,6 +55,20 @@ const TokenListsTable = ({ filter, tokens, handleTokenCount }) => {
                                         "Delete token with ID:",
                                         site.site_id,
                                     );
+                                    confirmationDialog({
+                                        icon: "warning",
+                                        title: "ต้องการลบ ?",
+                                        text: `คุณต้องการลบ Token (${site.site_name}) นี้!`,
+                                        confirmButtonText: "ใช่, ลบเลย!",
+                                        confirmButtonColor: "#93000a",
+                                        cancelButtonText: "ยกเลิก",
+                                        cancelButtonColor: "#859399",
+                                        resTitle: "ลบแล้ว!",
+                                        resText: "Token ของคุณถูกลบแล้ว.",
+                                        resIcon: "success",
+                                        url: "",
+                                        onClick: handleDelete,
+                                    });
                                 }}
                                 className="flex items-center gap-1 p-2 hover:text-error rounded transition-colors duration-100 cursor-pointer"
                             >
@@ -133,7 +97,7 @@ const TokenListsTable = ({ filter, tokens, handleTokenCount }) => {
 export default function TokenLists() {
     const formData = new FormData();
     const [keyFilter, setKeyFilter] = useState("");
-    const { memberInfo } = UseAuth();
+    const { memberInfo, reloadMemberInfo } = UseAuth();
     const [tokenCount, setTokenCount] = useState(0);
 
     const handleKeyFilterChange = (e) => {
@@ -233,6 +197,10 @@ export default function TokenLists() {
                                 handleTokenCount={(count) =>
                                     setTokenCount(count || 0)
                                 }
+                                handleDelete={() => {
+                                    // delete token and then reload member info to update the list
+                                    reloadMemberInfo();
+                                }}
                             />
                         )}
                     </section>

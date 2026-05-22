@@ -74,7 +74,7 @@ export default function Header({ activePage, onNavigate }) {
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const [notifications, setNotifications] = useState(mockNotifications);
     const { appTitle, navItems } = UseApp();
-    const { memberInfo, signOut, reloadMemberInfo, reloadSecurityLogs } = UseAuth();
+    const { memberInfo, signOut, reloadMemberInfo, reloadSecurityLogs, reloadApiEndpoints } = UseAuth();
     const navigate = useNavigate();
 
     const menuRef = useRef(null);
@@ -308,15 +308,16 @@ export default function Header({ activePage, onNavigate }) {
                                     onClick={() => {
                                         setIsUserMenuOpen(false);
                                         reloadMemberInfo();
+                                        reloadApiEndpoints();
                                     }}
                                     className="w-full flex items-center gap-3 px-4 py-2 text-sm text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors text-left font-sans cursor-pointer">
-                                        <CloudDownload className="w-4 h-4" /> Account Reload
+                                        <CloudDownload className="w-4 h-4" /> App Update
                                     </button>
                                     <button
                                         onClick={() => {
                                             setIsUserMenuOpen(false);
                                             reloadSecurityLogs();
-                                            onNavigate("security-logs");
+                                            onNavigate("security-logs");                                            
                                         }}
                                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors text-left font-sans cursor-pointer"
                                     >

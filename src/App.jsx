@@ -15,12 +15,20 @@ import TokenLists from "./components/TokenLists";
 export default function App() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const { activePage, setActivePage } = UseApp();
-    const { endpointStatus, responseTime, tokenCreated, tokenCreatedClear } =
+    const { endpointStatus, responseTime, tokenCreated, tokenCreatedClear, apiEndpoints, reloadApiEndpoints, reloadMemberInfo } =
         UseAuth();
 
     if (responseTime?.apis === undefined || responseTime?.sandbox === undefined) {
         endpointStatus && endpointStatus("apis", "https://apis.mju.ac.th");
         endpointStatus && endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
+    }
+
+    const handleSetActivePage = (page) => {
+        setActivePage(page);
+        if (page === "tokens") {
+            reloadMemberInfo();
+            window.location.reload();
+        } else if (page === "security-logs") window.location.reload();
     }
 
     useEffect(() => {
@@ -38,10 +46,16 @@ export default function App() {
         return () => clearInterval(interval);
     }, [endpointStatus, responseTime, activePage]);
 
+    useEffect(() => {
+        if (activePage === "home" && !apiEndpoints) {
+            reloadApiEndpoints();
+        }
+    }, [activePage, apiEndpoints, reloadApiEndpoints]);
+
     return (
         <div className="min-h-screen bg-surface">
-            <Header activePage={activePage} onNavigate={setActivePage} />
-            <Sidebar activePage={activePage} onNavigate={setActivePage} />
+            <Header activePage={activePage} onNavigate={handleSetActivePage} />
+            <Sidebar activePage={activePage} onNavigate={handleSetActivePage} />
 
             <main className="md:pl-60 pt-16 min-h-screen shadow-2xl">
                 <div className="max-w-6xl mx-auto px-margin py-12">

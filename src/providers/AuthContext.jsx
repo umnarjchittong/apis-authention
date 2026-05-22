@@ -19,6 +19,11 @@ export const AuthProvider = ({ children }) => {
             ? JSON.parse(localStorage.getItem("securityLogs"))
             : null,
     );
+    const [apiEndpoints, setApiEndpoints] = useState(
+        localStorage.getItem("apiEndpoints")
+            ? JSON.parse(localStorage.getItem("apiEndpoints"))
+            : null,
+    );
     const [responseTime, setResponseTime] = useState({});
     const [tokenCreated, setTokenCreated] = useState(null);
 
@@ -189,6 +194,67 @@ export const AuthProvider = ({ children }) => {
         return logs;
     };
 
+    const reloadApiEndpoints = async (limit = null) => {
+        const config = {
+            method: "get",
+            baseURL: `https://apis.mju.ac.th/authention/v1/apis${limit ? `?limit=${limit}` : ""}`,
+            headers: {
+                Authorization: "Bearer " + apiTokenAdmin,
+            },
+        };
+        const logs = await axios
+            .request(config)
+            .then((response) => {
+                showConsole &&
+                    console.log(
+                        "%cfetchApiEndpoints response:",
+                        "color:blue",
+                        response.data,
+                    );
+                if (response?.data && response?.data?.status === "success") {
+                    toastAlert({
+                        title: "โหลดข้อมูล apiEndpoints สำเร็จ",
+                        icon: "success",
+                        log_title : "API Endpoints",
+                        log_method : "GET",
+                        log_status : "success",
+                        log_detail : "Successfully loaded API endpoints.",
+                        log_meta : `Loaded ${response.data.data.length} endpoints`,
+                        log_user : memberInfo?.email || "unknown",
+                    });
+                    localStorage.setItem(
+                        "apiEndpoints",
+                        JSON.stringify(response.data.data),
+                    );
+                    setApiEndpoints(response.data.data);
+                    return response.data.data;
+                } else {
+                    toastAlert({
+                        title: "โหลดข้อมูล apiEndpoints ล้มเหลว",
+                        icon: "error",
+                        log_title : "API Endpoints",
+                        log_method : "GET",
+                        log_status : "error",
+                        log_detail : "Failed to load API endpoints.",
+                        log_meta : JSON.stringify(config),
+                        log_user : memberInfo?.email || "unknown",
+                    });
+                    showConsole &&
+                        console.log(
+                            "Failed to reload API endpoints: Invalid response data",
+                            response.data,
+                        );
+                    return null;
+                }
+            })
+            .catch((error) => {
+                showConsole &&
+                    console.log("Failed to reload API endpoints:", error);
+                return null;
+            });
+        return logs;
+    };
+
     const signOut = async () => {
         setMemberInfo(null);
         await sessionStorage.clear();
@@ -212,6 +278,8 @@ export const AuthProvider = ({ children }) => {
                 tokenCreatedClear,
                 apiTokenAdmin,
                 reloadMemberInfo,
+                apiEndpoints,
+                reloadApiEndpoints,
                 securityLogs,
                 reloadSecurityLogs,
             }}

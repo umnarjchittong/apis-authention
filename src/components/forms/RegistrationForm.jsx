@@ -6,13 +6,18 @@ import Swal from "sweetalert2";
 import { useEffect } from "react";
 import axios from "axios";
 
-import apiEndpoints from "../../assets/JSON/api_endpoint.json";
+// import apiEndpoints from "../../assets/JSON/api_endpoint.json";
 
 export default function RegistrationForm({ onGenerate }) {
-    const { memberInfo, generateToken, apiTokenAdmin, tokenCreatedClear } = UseAuth();
+    const {
+        memberInfo,
+        generateToken,
+        apiTokenAdmin,
+        tokenCreatedClear,
+        apiEndpoints,
+    } = UseAuth();
     const formData = new FormData();
     const navigate = useNavigate();
-
 
     // const handleProjectNameChange = (e) => {
     //     e.preventDefault();
@@ -36,20 +41,20 @@ export default function RegistrationForm({ onGenerate }) {
     const handleApiEndpointChange = (e) => {
         e.preventDefault();
         tokenCreatedClear();
-        formData.set("api_endpoint", e.target.value);
-        console.log("API Endpoint:", formData.get("api_endpoint"));
+        formData.set("api_id", e.target.value);
+        console.log("API Endpoint:", formData.get("api_id"));
     };
 
     const formReset = () => {
         formData.delete("site_name");
         formData.delete("site_url");
         formData.delete("site_token_lv");
-        formData.delete("api_endpoint");
+        formData.delete("api_id");
         document.getElementById("site_name").value = "";
         document.getElementById("site_url").value = "";
         document.getElementById("site_token_lv").value = "guest";
-        document.getElementById("api_endpoint").value = "";
-    }
+        document.getElementById("api_id").value = "";
+    };
 
     const handleGenerateToken = () => {
         if (memberInfo?.authLv >= 3) {
@@ -57,6 +62,7 @@ export default function RegistrationForm({ onGenerate }) {
                 site_name: formData.get("site_name"),
                 site_url: formData.get("site_url"),
                 site_token_lv: formData.get("site_token_lv"),
+                api_id: formData.get("api_id"),
             });
             // if (formData.get("site_name")?.trim() === "")
             //     formData.set(
@@ -76,6 +82,11 @@ export default function RegistrationForm({ onGenerate }) {
             const token = generateToken(
                 formData.get("site_token_lv")?.toLocaleLowerCase(),
             );
+            const endpoint = apiEndpoints.filter(
+                (endpoint) =>
+                    endpoint.api_id === parseInt(formData.get("api_id")),
+            )[0];
+            console.log("Selected API Endpoint:", endpoint);
             const body = {
                 site_name: formData.get("site_name"),
                 site_url: formData.get("site_url") || "",
@@ -85,11 +96,13 @@ export default function RegistrationForm({ onGenerate }) {
                     "guest",
                 user_id: memberInfo?.userID,
                 user_citizenID: memberInfo?.citizenID.toString(),
-                api_endpoint: formData.get("api_endpoint") || "guest",
+                api_endpoint: endpoint?.api_endpoint || "",
+                api_url: endpoint?.api_url || "",
+                api_id: parseInt(formData.get("api_id")),
             };
 
-            console.log("Request body for token generation:", body);
-
+            // console.log("Request body for token generation:", body);
+            // return;
             const config = {
                 method: "post",
                 url: "https://apis.mju.ac.th/authention/v1/sites",
@@ -100,10 +113,10 @@ export default function RegistrationForm({ onGenerate }) {
                 data: JSON.stringify(body),
             };
 
-            const response = axios(config)
+            axios(config)
                 .then(function (response) {
-                    console.log(JSON.stringify(response.data));       
-                    formReset();             
+                    console.log("API Response:", response.data, JSON.stringify(response.data));
+                    formReset();
                     onGenerate();
                     return response.data.data;
                 })
@@ -111,10 +124,6 @@ export default function RegistrationForm({ onGenerate }) {
                     console.log(error);
                     tokenCreatedClear();
                 });
-
-            console.log("API Response:", response);
-
-            
         }
     };
 
@@ -224,19 +233,22 @@ export default function RegistrationForm({ onGenerate }) {
                         API Endpoint
                     </label>
                     <select
-                        id="api_endpoint"
+                        id="api_id"
                         disabled={!memberInfo}
                         readOnly={!memberInfo}
                         onChange={handleApiEndpointChange}
-                        defaultValue={formData.get("api_endpoint") || "guest"}
+                        defaultValue={formData.get("api_id") || ""}
                         className="w-full bg-surface-container-lowest border border-outline-variant rounded-lg px-4 py-3 text-on-surface focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all appearance-none font-mono text-sm"
                     >
-                      {apiEndpoints?.sort((a, b) => a.api_endpoint.localeCompare(b.api_endpoint))?.map((endpoint, idx) => (
-                        <option key={idx} value={endpoint.api_endpoint}>
-                            {endpoint.api_endpoint} ({endpoint.api_url})
+                        <option value="" disabled>
+                            โปรดเลือก API Endpoint ที่ต้องการเข้าถึง
                         </option>
-                      ))}
-                      {/* {apiEndpoints?.map((endpoint, idx) => (
+                        {apiEndpoints?.map((endpoint, idx) => (
+                            <option key={idx} value={endpoint.api_id}>
+                                {endpoint.api_endpoint} ({endpoint.api_url})
+                            </option>
+                        ))}
+                        {/* {apiEndpoints?.map((endpoint, idx) => (
                         <option key={idx} value={endpoint.api_endpoint}>
                             {endpoint.api_endpoint} ({endpoint.api_url})
                         </option>
@@ -250,11 +262,32 @@ export default function RegistrationForm({ onGenerate }) {
                         whileTap={{ scale: 0.98 }}
                         onClick={(e) => {
                             e.preventDefault();
-                            if (document.getElementById("site_name").value.trim() !== "" && document.getElementById("site_url").value.trim() !== "") {
-                              formData.set("site_name", document.getElementById("site_name").value);
-                              formData.set("site_url", document.getElementById("site_url").value);
-                              formData.set("site_token_lv", document.getElementById("site_token_lv").value);
-                              handleGenerateToken();
+                            if (
+                                document
+                                    .getElementById("site_name")
+                                    .value.trim() !== "" &&
+                                document
+                                    .getElementById("site_url")
+                                    .value.trim() !== ""
+                            ) {
+                                formData.set(
+                                    "site_name",
+                                    document.getElementById("site_name").value,
+                                );
+                                formData.set(
+                                    "site_url",
+                                    document.getElementById("site_url").value,
+                                );
+                                formData.set(
+                                    "site_token_lv",
+                                    document.getElementById("site_token_lv")
+                                        .value,
+                                );
+                                formData.set(
+                                    "api_id",
+                                    document.getElementById("api_id").value,
+                                );
+                                handleGenerateToken();
                             }
                         }}
                         className="w-full bg-primary-container text-on-primary-container font-bold py-4 rounded-lg flex items-center justify-center gap-base neon-glow-primary transition-all cursor-pointer"

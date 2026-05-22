@@ -20,8 +20,8 @@ export default function MjuSsoLogin() {
     const [SSOuserInfo, setSSOUserInfo] = useState("");
     const { memberInfo, setMemberInfo, signOut } = UseAuth();
     const [tryAgainLink, setTryAgainLink] = useState(false);
-    const [tryAgainCountDown, setTryAgainCountDown] = useState(5);
-    const navigate = useNavigate();
+    // const [tryAgainCountDown, setTryAgainCountDown] = useState(5);
+    // const navigate = useNavigate();
 
     let code = new URLSearchParams(window.location.search).get("ac");
     !(code && code.length === 32) && (code = "");
@@ -477,7 +477,7 @@ export default function MjuSsoLogin() {
                 detail: "เข้าสู่ระบบด้วย MJUSSO สำเร็จ",
                 meta: JSON.stringify(memberInfo) || "",
                 user: memberInfo?.e_mail || "unknown",
-            });
+            });            
             handleSetLoadingStatus("กำลังเข้าสู่ระบบ", 259);
             localStorage.removeItem("mjuSsoUserInfo");
             window.location.replace("./");

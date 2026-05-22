@@ -97,3 +97,61 @@ export const alertError = ({
         }
     });
 };
+
+
+export const confirmationDialog = ({
+    icon = "warning",
+    title = "Are you sure?",
+    text = "You won't be able to revert this!",
+    confirmButtonText = "Yes, delete it!",
+    confirmButtonColor = "#3085d6",
+    cancelButtonText = "Cancel",
+    cancelButtonColor = "#d33",
+    resTitle = "Deleted!",
+    resText = "Your file has been deleted.",
+    resIcon = "success",
+    url = "",
+    onClick = null,
+    log_title = "",
+    log_method = "",
+    log_status = "",
+    log_detail = "",
+    log_meta = "",
+    log_user = "",
+}) => {
+    // if (log_title && log_method && log_status) {
+    //     createLog({
+    //         title: log_title,
+    //         method: log_method,
+    //         status: log_status,
+    //         detail: log_detail,
+    //         meta: log_meta,
+    //         user: log_user,
+    //     });
+    // }
+
+    return Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        showCancelButton: true,
+        confirmButtonColor: confirmButtonColor,
+        cancelButtonColor: cancelButtonColor,
+        confirmButtonText: confirmButtonText,
+        cancelButtonText: cancelButtonText,
+    }).then((result) => {
+        if (result.isConfirmed)
+            Swal.fire({
+                title: resTitle,
+                text: resText,
+                icon: resIcon,
+            }).then((res) => {
+                if (res.isConfirmed) {
+                    if (url) {
+                        onClick && onClick();
+                        window.location.href = url;
+                    }
+                }
+            });
+    });
+};

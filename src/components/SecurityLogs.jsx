@@ -13,7 +13,7 @@ import {
 import { motion, AnimatePresence } from "motion/react";
 import { UseAuth } from "../providers/AuthContext";
 import createLog from "../services/Logs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const logsPerPage = 20;
 
@@ -86,7 +86,6 @@ export default function SecurityLogs() {
         setPage(1);
         setTotalPages(Math.ceil(filtered.length / logsPerPage));
     };
-
     // const totalPages = Math.ceil(filterResult.length / logsPerPage);
 
     return (
@@ -128,7 +127,7 @@ export default function SecurityLogs() {
                 </div>
 
                 {/* Filters and Search */}
-                {filterResult?.length && (
+                {filterResult?.length > 0 && (
                     <div className="flex flex-col md:flex-row gap-4 items-center justify-between glass-panel p-4 rounded-xl">
                         <div className="relative w-full md:w-96">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-outline" />

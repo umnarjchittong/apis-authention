@@ -1,4 +1,4 @@
-import { CheckCircle2 } from "lucide-react";
+import { CheckCircle2, Copy } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Swal from "sweetalert2";
@@ -26,25 +26,34 @@ export default function TokenSuccessModal({ isOpen, onClose, token }) {
                         <h2 className="text-3xl font-bold text-on-surface mb-2">
                             Token Generated
                         </h2>
-                        <p className="text-on-surface-variant mb-margin">
+                        <p className="text-on-surface-variant mb-3">
                             รหัสโทเค็นโครงการเฉพาะของคุณ,ได้รับการกำหนดไว้อย่างปลอดภัยแล้ว.
                         </p>
 
-                        <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant mb-margin font-mono text-primary break-all group relative">
-                            <CopyToClipboard
-                                text={token}
-                                onCopy={() => {
-                                    toastCopySuccess({
-                                        title: "Copied to clipboard",
-                                        icon: "success",
-                                    });
-                                    this.setState({ copied: true });
-                                }}
-                            >
+                        <>
+                            <div className="w-full flex justify-end mb-2">
+                                <CopyToClipboard
+                                    text={token}
+                                    onCopy={() => {
+                                        toastCopySuccess({
+                                            title: "Copied to clipboard",
+                                            icon: "success",
+                                        });
+                                        this.setState({ copied: true });
+                                    }}
+                                >
+                                    <div className="flex items-center gap-2 cursor-pointer text-sm font-normal"><Copy
+                                        title="Copy to clipboard"
+                                        className="w-8 h-8 text-tertiary p-1.5 cursor-pointer"
+                                    /><span className="text-on-surface-variant">click to copy</span>
+                                    </div>
+                                </CopyToClipboard>
+                            </div>
+                            <div className="bg-surface-container-lowest p-4 rounded-lg border border-outline-variant mb-margin font-mono text-primary break-all group relative">
                                 <span className="relative z-10">{token}</span>
-                            </CopyToClipboard>
-                            <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
-                        </div>
+                                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"></div>
+                            </div>
+                        </>
 
                         <button
                             onClick={onClose}
