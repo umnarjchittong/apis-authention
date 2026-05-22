@@ -90,7 +90,7 @@ export default function ApiReference() {
                     <section className="space-y-6">
                         <h2 className="text-2xl font-bold flex items-center gap-3">
                             <Database className="w-6 h-6 text-tertiary" />
-                            Core Endpoints
+                            APIs Core Endpoints
                         </h2>
 
                         {endpoints.map((ep, i) => (

@@ -3,9 +3,9 @@ import { Book, Shield, Zap, Terminal, CheckCircle, AlertTriangle, ExternalLink }
 const sections = [
   { id: 'introduction', label: 'Introduction' },
   { id: 'quickstart', label: 'Quick Start' },
-  { id: 'architecture', label: 'Architecture' },
+  // { id: 'architecture', label: 'Architecture' },
   { id: 'security', label: 'Security Protocols' },
-  { id: 'ratelimits', label: 'Rate Limiting' },
+  // { id: 'ratelimits', label: 'Rate Limiting' },
 ];
 
 export default function Documentation() {
@@ -40,9 +40,11 @@ export default function Documentation() {
           
           <div className="mt-gutter p-6 glass-panel rounded-xl border-l-4 border-tertiary">
             <h4 className="text-xs font-bold uppercase tracking-wider mb-2 font-mono text-tertiary">Developer Support</h4>
-            <p className="text-xs text-on-surface-variant mb-4">Need help with complex deployments?</p>
-            <button className="text-xs text-primary font-bold flex items-center gap-1 hover:underline cursor-pointer">
-              Join Discord Server <ExternalLink className="w-3 h-3" />
+            <p className="text-xs text-on-surface-variant mb-4">หากต้องการความช่วยเหลือเกี่ยวกับการปรับใช้ที่ซับซ้อน โปรดติดต่อเรา</p>
+            <button
+              onClick={() => window.open('https://m.me/umnarj', '_blank')}
+             className="text-xs text-primary font-bold flex items-center gap-1 hover:underline cursor-pointer">
+              FB Messenger <ExternalLink className="w-3 h-3" />
             </button>
           </div>
         </nav>
@@ -74,8 +76,8 @@ export default function Documentation() {
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold font-mono shrink-0">1</div>
                   <div>
-                    <h3 className="font-bold mb-2">Create an Account</h3>
-                    <p className="text-sm text-on-surface-variant">Sign up via the main portal and verify your enterprise domain to unlock full capabilities.</p>
+                    <h3 className="font-bold mb-2">Login with MJUSSO</h3>
+                    <p className="text-sm text-on-surface-variant">ลงทะเบียนด้วยบัญชี MJUSSO ของคุณเพื่อเริ่มต้นใช้งาน</p>
                   </div>
                 </div>
               </div>
@@ -83,8 +85,8 @@ export default function Documentation() {
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold font-mono shrink-0">2</div>
                   <div>
-                    <h3 className="font-bold mb-2">Register your First Token</h3>
-                    <p className="text-sm text-on-surface-variant">Navigate to the <code className="bg-surface-container px-1 rounded">Tokens</code> page and fill out your project details. Your token will be ready instantly.</p>
+                    <h3 className="font-bold mb-2">ลงทะเบียนเพื่อสร้าง Token แรกของคุณ</h3>
+                    <p className="text-sm text-on-surface-variant">ไปที่หน้า <code className="bg-surface-container text-tertiary px-1 rounded hover:cursor-pointer">Home</code> และกรอกรายละเอียดโครงการของคุณ โทเค็นของคุณจะพร้อมใช้งานทันที</p>
                   </div>
                 </div>
               </div>
@@ -92,8 +94,8 @@ export default function Documentation() {
                 <div className="flex items-start gap-4">
                   <div className="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold font-mono shrink-0">3</div>
                   <div>
-                    <h3 className="font-bold mb-2">Integrate the SDK</h3>
-                    <p className="text-sm text-on-surface-variant">Use our official client-side or server-side libraries to start communicating with the global cluster.</p>
+                    <h3 className="font-bold mb-2">ผสาน SDK เข้ากับโปรเจคของคุณ</h3>
+                    <p className="text-sm text-on-surface-variant">ใช้ไลบรารีฝั่ง Client หรือฝั่ง Server เพื่อเริ่มสื่อสารกับ <code className="bg-surface-container text-primary px-1 rounded hover:cursor-pointer">APIs: MJU Data Center</code></p>
                   </div>
                 </div>
               </div>
@@ -125,15 +127,15 @@ export default function Documentation() {
             <div className="mt-8 bg-error/10 border border-error/20 p-6 rounded-xl flex items-start gap-4">
               <AlertTriangle className="w-6 h-6 text-error shrink-0" />
               <div>
-                <h4 className="font-bold text-error mb-1">Critical Security Notice</h4>
+                <h4 className="font-bold text-error mb-1">ประกาศความปลอดภัย</h4>
                 <p className="text-xs text-on-surface-variant leading-relaxed">
-                  Never expose your API tokens in client-side code. Always use server-side proxies or edge handlers to secure your environment variables. Compromised tokens should be revoked immediately via the API Reference or Dashboard.
+                  ห้ามเปิดเผย API Token ของคุณในโค้ดฝั่งไคลเอ็นต์เด็ดขาด ควรใช้พร็อกซีฝั่งเซิร์ฟเวอร์หรือเอดจ์แฮนด์เลอร์เพื่อรักษาความปลอดภัยของตัวแปรสภาพแวดล้อมเสมอ หากพบโทเค็นที่ถูกบุกรุก ควรเพิกถอนทันทีผ่านทางหน้า <code className="bg-surface-container text-tertiary px-1 rounded hover:cursor-pointer">Tokens</code>.
                 </p>
               </div>
             </div>
           </section>
 
-          <section id="ratelimits" className="scroll-mt-24">
+          {/* <section id="ratelimits" className="scroll-mt-24">
             <div className="flex items-center gap-3 mb-6">
               <Zap className="w-8 h-8 text-primary" />
               <h2 className="text-3xl font-bold">Rate Limiting</h2>
@@ -166,7 +168,7 @@ export default function Documentation() {
                 </tbody>
               </table>
             </div>
-          </section>
+          </section> */}
         </div>
       </div>
     </div>

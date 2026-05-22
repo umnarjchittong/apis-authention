@@ -42,6 +42,9 @@ export default function TokenSuccessModal({ isOpen, onClose, token }) {
                                         this.setState({ copied: true });
                                     }}
                                 >
+                                    <button className="text-on-surface-variant hover:text-primary transition-colors">
+                                <Copy className="w-4 h-4" />
+                            </button>
                                     <div className="flex items-center gap-2 cursor-pointer text-sm font-normal"><Copy
                                         title="Copy to clipboard"
                                         className="w-8 h-8 text-tertiary p-1.5 cursor-pointer"

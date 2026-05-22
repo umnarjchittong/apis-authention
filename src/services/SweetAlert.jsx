@@ -11,6 +11,7 @@ export const toastCopySuccess = ({
     position = "top-end",
 }) => {
     return Swal.mixin({
+        theme: 'light',
         toast: true,
         position: position,
         showConfirmButton: false,
@@ -49,6 +50,7 @@ export const toastAlert = ({
         });
     }
     return Swal.mixin({
+        theme: 'light',
         toast: true,
         position: position,
         showConfirmButton: false,
@@ -87,6 +89,7 @@ export const alertError = ({
         });
     }
     return Swal.fire({
+        theme: 'light',
         icon: "error",
         title: title,
         text: text,
@@ -131,6 +134,7 @@ export const confirmationDialog = ({
     // }
 
     return Swal.fire({
+        theme: 'light',
         title: title,
         text: text,
         icon: icon,

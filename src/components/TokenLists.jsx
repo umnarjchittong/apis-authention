@@ -5,13 +5,16 @@ import {
     Trash2,
     DatabaseSearch,
     SearchX,
+    KeySquare,
+    SquarePen,
 } from "lucide-react";
-import { motion } from "motion/react";
+import { motion , AnimatePresence} from "motion/react";
 import { UseAuth } from "../providers/AuthContext";
 import { useState } from "react";
 import { confirmationDialog } from "../services/SweetAlert";
+import dayjs from "dayjs";
 
-const TokenListsTable = ({ filter, tokens, handleTokenCount, handleDelete }) => {
+const TokenListsTable = ({ filter, tokens, handleTokenCount, handleDelete, handleViewMore }) => {
     let results = filter
         ? tokens?.filter((token) =>
               token.site_name.toLowerCase().includes(filter.toLowerCase()),
@@ -52,6 +55,31 @@ const TokenListsTable = ({ filter, tokens, handleTokenCount, handleDelete }) => 
                             <span
                                 onClick={() => {
                                     console.log(
+                                        "Edit token with ID:",
+                                        site.site_id,
+                                    );
+                                    // confirmationDialog({
+                                    //     icon: "warning",
+                                    //     title: "ต้องการลบ ?",
+                                    //     text: `คุณต้องการลบ Token (${site.site_name}) นี้!`,
+                                    //     confirmButtonText: "ใช่, ลบเลย!",
+                                    //     confirmButtonColor: "#93000a",
+                                    //     cancelButtonText: "ยกเลิก",
+                                    //     cancelButtonColor: "#859399",
+                                    //     resTitle: "ลบแล้ว!",
+                                    //     resText: "Token ของคุณถูกลบแล้ว.",
+                                    //     resIcon: "success",
+                                    //     url: "",
+                                    //     onClick: handleDelete,
+                                    // });
+                                }}
+                                className="flex items-center gap-1 p-2 hover:text-tertiary-container rounded transition-colors duration-100 cursor-pointer"
+                            >
+                                <SquarePen className="w-6 h-6" />
+                            </span>
+                            <span
+                                onClick={() => {
+                                    console.log(
                                         "Delete token with ID:",
                                         site.site_id,
                                     );
@@ -84,7 +112,9 @@ const TokenListsTable = ({ filter, tokens, handleTokenCount, handleDelete }) => 
                     </p>
 
                     <div className="mt-4 pt-4 border-t border-outline-variant/10 flex justify-end">
-                        <button className="text-xs font-mono text-primary flex items-center gap-1 hover:underline cursor-pointer">
+                        <button
+                        onClick={()=> handleViewMore(site)}
+                        className="text-xs font-mono text-primary flex items-center gap-1 hover:underline cursor-pointer">
                             View More <ChevronRight className="w-3 h-3" />
                         </button>
                     </div>
@@ -99,6 +129,8 @@ export default function TokenLists() {
     const [keyFilter, setKeyFilter] = useState("");
     const { memberInfo, reloadMemberInfo } = UseAuth();
     const [tokenCount, setTokenCount] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [tokenInfo, setTokenInfo] = useState(null);
 
     const handleKeyFilterChange = (e) => {
         e.preventDefault();
@@ -197,6 +229,10 @@ export default function TokenLists() {
                                 handleTokenCount={(count) =>
                                     setTokenCount(count || 0)
                                 }
+                                handleViewMore={(site) => {
+                                    setTokenInfo(site);
+                                    setIsModalOpen(true);
+                                }}
                                 handleDelete={() => {
                                     // delete token and then reload member info to update the list
                                     reloadMemberInfo();
@@ -235,6 +271,94 @@ export default function TokenLists() {
                     </div>
                 </div> */}
             </div>
+
+            <TokenInfoModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                info={tokenInfo}
+                />
         </div>
+    );
+}
+
+export function TokenInfoModal({ isOpen, onClose, info }) {
+    return (
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-gutter">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={onClose}
+                        className="absolute inset-0 bg-surface/90 backdrop-blur-md"
+                    />
+                    <motion.div
+                        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                        animate={{ scale: 1, opacity: 1, y: 0 }}
+                        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                        className="relative glass-panel p-margin rounded-xl max-w-3xl w-full text-center border-2 border-primary shadow-[0_0_50px_rgba(0,209,255,0.2)]"
+                    >
+                        <KeySquare className="w-16 h-16 text-primary mx-auto mb-4" />
+                        <h2 className="text-3xl font-bold text-on-surface mb-2">
+                            API Token Information
+                        </h2>
+                        {/* <p className="text-on-surface-variant mb-margin">
+                            รหัสโทเค็นโครงการเฉพาะของคุณ,ได้รับการกำหนดไว้อย่างปลอดภัยแล้ว.
+                        </p> */}
+
+                        <div className="bg-surface-container-lowest p-4 rounded-lg border text-lg font-light border-outline-variant mb-margin text-primary break-all group relative">
+                            <span className="relative z-10">
+                                {/* {JSON.stringify(info, null, 2)} */}
+                                <p className="text-left text-wrap">
+                                    <span className="font-bold text-tertiary">
+                                        Project Name:{" "}
+                                    </span>
+                                    {info?.site_name}
+                                </p>
+                                <p className="text-left text-wrap">
+                                    <span className="font-bold text-tertiary">
+                                        Project URL:{" "}
+                                    </span>
+                                    {info?.site_url}
+                                </p>
+                                <p className="text-left text-wrap">
+                                    <span className="font-bold text-tertiary">
+                                        TOKEN:{" "}
+                                    </span>
+                                    {info?.site_token}
+                                </p>
+                                <p className="text-left text-wrap">
+                                    <span className="font-bold text-tertiary">
+                                        Endpoint:{" "}
+                                    </span>
+                                    {info?.api_endpoint}
+                                </p>
+                                <p className="text-left text-wrap">
+                                    <span className="font-bold text-tertiary">
+                                        Endpoint URL:{" "}
+                                    </span>
+                                    {info?.api_url}
+                                </p>
+                                <p className="text-left text-wrap">
+                                    <span className="font-bold text-tertiary">
+                                        Lastupdate:{" "}
+                                    </span>
+                                    {info?.site_update_at ? dayjs(info?.site_update_at).format("YYYY-MM-DD HH:mm:ss") : dayjs(info.create_at).format("YYYY-MM-DD HH:mm:ss")}
+                                </p>
+                            </span>
+                            <div className="absolute inset-0 bg-primary/5 opacity-60 group-hover:opacity-0 transition-opacity rounded-lg"></div>
+                        </div>
+
+                        <button
+                            onClick={onClose}
+                            className="px-margin py-3 bg-primary-container text-on-primary-container font-bold rounded-lg w-full transition-transform active:scale-95 cursor-pointer"
+                        >
+                            ตกลง
+                        </button>
+                    </motion.div>
+                </div>
+            )}
+        </AnimatePresence>
     );
 }
