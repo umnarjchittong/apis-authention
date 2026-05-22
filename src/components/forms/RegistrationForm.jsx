@@ -269,12 +269,9 @@ export default function RegistrationForm({ onGenerate }) {
                         <ShieldCheck className="w-5 h-5 text-tertiary shrink-0" />
                         <p className="text-[12px] leading-relaxed">
                             <span className="font-bold text-on-surface">
-                                Security & Rate Limits:
+                                ความปลอดภัย:
                             </span>{" "}
-                            Tokens are encrypted at rest. Rate limiting is
-                            applied based on your tier (Basic: 100 req/min).
-                            Ensure your token is stored in a secure server-side
-                            environment.
+                            โปรดตรวจสอบให้แน่ใจว่าโทเค็นของคุณถูกจัดเก็บไว้ในสภาพแวดล้อมฝั่งเซิร์ฟเวอร์ที่ปลอดภัย.
                         </p>
                     </div>
                 </footer>

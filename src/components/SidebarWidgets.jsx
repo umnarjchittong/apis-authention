@@ -40,8 +40,7 @@ export default function SidebarWidgets() {
                     Usage Insights
                 </h3>
                 <p className="text-[12px] text-on-surface-variant mb-4">
-                    Enterprise tokens unlock advanced streaming and 0ms latency
-                    routing across global clusters.
+                    Application tokens เพียงพอสำหรับการใช้งานในระดับพื้นฐาน. เพื่อเรียกใช้ข้อมูลจาก Data Center ของมหาวิทยาลัยได้สำหรับสรุปข้อมูล หรือสร้างแดชบอร์ดอย่างมืออาชีพ.
                 </p>
                 <div className="w-full h-24 bg-surface-container-lowest rounded-lg overflow-hidden relative border border-outline-variant/30 flex items-end justify-between px-2 pb-1">
                     {[30, 45, 35, 70, 50, 85, 40].map((height, i) => (

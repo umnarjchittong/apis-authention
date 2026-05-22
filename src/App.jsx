@@ -18,16 +18,16 @@ export default function App() {
     const { endpointStatus, responseTime, tokenCreated, tokenCreatedClear } =
         UseAuth();
 
-    if (responseTime.apis === undefined || responseTime.sandbox === undefined) {
-        endpointStatus("apis", "https://apis.mju.ac.th");
-        endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
+    if (responseTime?.apis === undefined || responseTime?.sandbox === undefined) {
+        endpointStatus && endpointStatus("apis", "https://apis.mju.ac.th");
+        endpointStatus && endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
     }
 
     useEffect(() => {
         const checkEndpoints = () => {
           if (activePage === "home") {
-            endpointStatus("apis", "https://apis.mju.ac.th");
-            endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
+            endpointStatus && endpointStatus("apis", "https://apis.mju.ac.th");
+            endpointStatus && endpointStatus("sandbox", "https://apissandbox.mju.ac.th");
           }
         };
 

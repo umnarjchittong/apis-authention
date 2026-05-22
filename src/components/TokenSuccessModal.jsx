@@ -2,6 +2,7 @@ import { CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Swal from "sweetalert2";
+import { toastCopySuccess } from "../services/SweetAlert";
 
 export default function TokenSuccessModal({ isOpen, onClose, token }) {
     return (
@@ -33,20 +34,9 @@ export default function TokenSuccessModal({ isOpen, onClose, token }) {
                             <CopyToClipboard
                                 text={token}
                                 onCopy={() => {
-                                    Swal.mixin({
-                                        toast: true,
-                                        position: "top-end",
-                                        showConfirmButton: false,
-                                        timer: 1000,
-                                        timerProgressBar: true,
-                                        didOpen: (toast) => {
-                                            toast.onmouseenter = Swal.stopTimer;
-                                            toast.onmouseleave =
-                                                Swal.resumeTimer;
-                                        },
-                                    }).fire({
-                                        icon: "success",
+                                    toastCopySuccess({
                                         title: "Copied to clipboard",
+                                        icon: "success",
                                     });
                                     this.setState({ copied: true });
                                 }}

@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { UseAuth } from "../providers/AuthContext";
+import createLog from "./Logs";
+import { alertError } from "./SweetAlert";
 
 const apiTokenAdmin = import.meta.env.VITE_API_TOKEN_ADMIN;
 const showConsole =
@@ -16,7 +18,7 @@ export default function MjuSsoLogin() {
     const [loadingStatus, setLoadingStatus] = useState("กำลังรวบรวมข้อมูล");
     const [isLoaded, setIsLoaded] = useState(false);
     const [SSOuserInfo, setSSOUserInfo] = useState("");
-    const { memberInfo, setMemberInfo, signOut, createLog } = UseAuth();
+    const { memberInfo, setMemberInfo, signOut } = UseAuth();
     const [tryAgainLink, setTryAgainLink] = useState(false);
     const [tryAgainCountDown, setTryAgainCountDown] = useState(5);
     const navigate = useNavigate();
@@ -43,7 +45,7 @@ export default function MjuSsoLogin() {
     const handleSetIsLoaded = (value) => {
         showConsole && console.log("IsLoaded:", value);
         setIsLoaded(value);
-    };   
+    };
 
     const autoAddMember = (userInfo) => {
         const data = JSON.stringify({
@@ -81,16 +83,20 @@ export default function MjuSsoLogin() {
             .then((response) => {
                 // setLoadingStatus("โหลดข้อมูลผู้ใช้สําเร็จ");
                 showConsole &&
-                console.log("res โหลดข้อมูลผู้ใช้สำเร็จ:", response.data.data);
+                    console.log(
+                        "res โหลดข้อมูลผู้ใช้สำเร็จ:",
+                        response.data.data,
+                    );
                 console.log("memberInfo:", JSON.stringify(response.data.data));
                 handleSetLoadingStatus("สร้างข้อมูลผู้ใช้ใหม่สําเร็จ", 195);
                 handleSetIsLoaded(true);
                 createLog({
-                    title: "add member info with MJUSSO",
+                    title: "add member info",
                     method: "post",
                     status: "success",
-                    detail: JSON.stringify(response.data.data),
-                    user: response?.data?.email,
+                    detail: "add new member info with MJUSSO",
+                    meta: JSON.stringify(response?.data?.data) || "",
+                    user: response?.data?.data?.email || "unknown",
                 });
             })
             .catch((error) => {
@@ -114,7 +120,10 @@ export default function MjuSsoLogin() {
                 userInfo?.division ||
                 "ไม่ระบุ",
             avatar: userInfo.personnelPhoto
-                ? encodeURIComponent("https://personnel.mju.ac.th/photomju/" + userInfo.personnelPhoto)
+                ? encodeURIComponent(
+                      "https://personnel.mju.ac.th/photomju/" +
+                          userInfo.personnelPhoto,
+                  )
                 : encodeURIComponent("/user_default.png"),
         });
         showConsole &&
@@ -150,11 +159,12 @@ export default function MjuSsoLogin() {
                     );
                 handleSetIsLoaded(true);
                 createLog({
-                    title: "update member info with MJUSSO",
+                    title: "update member info",
                     method: "patch",
                     status: "success",
-                    detail: JSON.stringify(response.data.data),
-                    user: response?.data?.email,
+                    detail: "update member info with MJUSSO",
+                    meta: JSON.stringify(response.data.data),
+                    user: response?.data?.data?.email || "unknown",
                 });
                 return response.data.data;
             })
@@ -210,15 +220,13 @@ export default function MjuSsoLogin() {
                     showConsole &&
                         console.log("mjuSsoUserInfo:", mjuSsoUserInfo);
                     autoUpdateMember(mjuSsoUserInfo);
-                    handleSetIsLoaded(true);
                     return response.data.data;
                 } else {
                     const mjuSsoUserInfo = JSON.parse(
                         localStorage.getItem("mjuSsoUserInfo"),
                     );
-                    autoAddMember(mjuSsoUserInfo);                    
+                    autoAddMember(mjuSsoUserInfo);
                     const memInfo = assignMemberInfo(mjuSsoUserInfo);
-                    handleSetIsLoaded(true);
                     return memInfo;
                 }
             })
@@ -251,14 +259,7 @@ export default function MjuSsoLogin() {
         setMemberInfo(memInfo);
         localStorage.setItem("memberInfo", JSON.stringify(memInfo));
         showConsole && console.log("assignMemberInfo:", memInfo);
-        handleSetIsLoaded(true);
         return memInfo;
-    };
-
-    const readyToGoApp = () => {
-        handleSetLoadingStatus("กำลังเข้าสู่ระบบ", 259);
-        localStorage.removeItem("mjuSsoUserInfo");
-        window.location.replace("./");
     };
 
     async function fetchMjuSsoUserInfo({
@@ -347,9 +348,6 @@ export default function MjuSsoLogin() {
                     });
                 }
                 return;
-                // } else {
-                //   handleSetLoadingStatus("เชื่อมต่อกับเซิฟเวอร์ MJUSSO สำเร็จ", 199);
-                //   showConsole && console.log("MJUSSO response success:");
             }
 
             handleSetLoadingStatus("เชื่อมต่อกับเซิฟเวอร์ MJUSSO สำเร็จ", 342);
@@ -364,24 +362,57 @@ export default function MjuSsoLogin() {
             // return !response?.data?.studentCode ? true : false;
 
             //todo check student or staff by email if email start with MJU is student
-            if (response?.data?.e_mail.toUpperCase().startsWith("MJU")) {
+            if (
+                !response?.data?.e_mail ||
+                response?.data?.e_mail?.toUpperCase().startsWith("MJU")
+            ) {
+                handleSetLoadingStatus(
+                    "ยังไม่อนุญาตให้นักศึกษาเข้าถึงระบบนี้",
+                    336,
+                );
+                alertError({
+                    title: "ขออภัย",
+                    text: "ยังไม่อนุญาตให้นักศึกษาเข้าถึงระบบนี้",
+                    url: `https://sso.mju.ac.th/signout.aspx?cid=${clientId}&line=374`,
+                    onClick: () => signOut(),
+                    log_title: "MJUSSO",
+                    log_method: "student",
+                    log_status: "failed",
+                    log_detail:
+                        "ผู้ใช้ที่เข้าสู่ระบบเป็นนักศึกษา ไม่อนุญาตให้เข้าถึงระบบ",
+                    log_meta: JSON.stringify(response.data) || "",
+                    log_user: response?.data?.e_mail || "unknown",
+                });
                 showConsole &&
                     console.log("MJUSSO userInfo is student:", response.data);
                 createLog({
-                    title: "login",
-                    method: "Authention with MJUSSO",
-                    status: "student",
-                    detail: JSON.stringify(response.data),
-                    user: response?.data?.e_mail,
+                    title: "MJUSSO",
+                    method: "authention",
+                    status: "failed",
+                    detail: "ผู้ใช้ที่เข้าสู่ระบบเป็นนักศึกษา ไม่อนุญาตให้เข้าถึงระบบ",
+                    meta: JSON.stringify(response.data) || "",
+                    user: response?.data?.e_mail || "unknown",
                 });
                 return false;
             }
 
             return response.data.citizenID;
         } catch (error) {
+            alertError({
+                title: "ขออภัย",
+                text: "ยังไม่อนุญาตให้นักศึกษาเข้าถึงระบบนี้",
+                url: `https://sso.mju.ac.th/signout.aspx?cid=${clientId}&line=374`,
+                onClick: () => signOut(),
+                log_title: "MJUSSO",
+                log_method: "post",
+                log_status: "failed",
+                log_detail: "พบปัญหาเกี่ยวกับการเชื่อมต่อ MJUSSO",
+                log_meta: JSON.stringify({ clientId, code, config }) || "",
+                log_user: "unknown",
+            });
             handleSetLoadingStatus("พบปัญหาเกี่ยวกับการเชื่อมต่อ MJUSSO.", 208);
             localStorage.removeItem("MJUSSO_Attempt");
-            showConsole && console.log(`MJUSSO err: ${error}`);
+            console.error(`MJUSSO err: ${error}`);
         }
     }
 
@@ -405,10 +436,11 @@ export default function MjuSsoLogin() {
                 setSSOUserInfo: setSSOUserInfo,
             }).then((res) => {
                 if (res) {
-                    console.log("res:", res);
+                    console.log("%cres:", "color:pink", res);
+                    // return;
                     fetchMemberInfo(res).then((memInfo) => {
                         if (memInfo && memInfo.citizenID) {
-                            readyToGoApp();
+                            console.log("memInfo:", memInfo);
                         }
                     });
                     // assignMemberInfo(
@@ -435,6 +467,24 @@ export default function MjuSsoLogin() {
             });
         }
     }, [clientId, code]);
+
+    useEffect(() => {
+        const readyToGoApp = () => {
+            createLog({
+                title: "MJUSSO",
+                method: "auth",
+                status: "success",
+                detail: "เข้าสู่ระบบด้วย MJUSSO สำเร็จ",
+                meta: JSON.stringify(memberInfo) || "",
+                user: memberInfo?.e_mail || "unknown",
+            });
+            handleSetLoadingStatus("กำลังเข้าสู่ระบบ", 259);
+            localStorage.removeItem("mjuSsoUserInfo");
+            window.location.replace("./");
+        };
+
+        !isDebug && isLoaded && readyToGoApp();
+    }, [isLoaded, memberInfo]);
 
     return (
         <div className="w-full max-w-sm mx-auto h-screen flex flex-col justify-center -mt-20 text-center">

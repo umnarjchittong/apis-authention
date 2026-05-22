@@ -10,6 +10,7 @@ import {
     CheckCircle2,
     AlertCircle,
     X,
+    CloudDownload,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { UseApp } from "../../providers/AppContext";
@@ -73,7 +74,7 @@ export default function Header({ activePage, onNavigate }) {
     const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
     const [notifications, setNotifications] = useState(mockNotifications);
     const { appTitle, navItems } = UseApp();
-    const { memberInfo, signOut } = UseAuth();
+    const { memberInfo, signOut, reloadMemberInfo, reloadSecurityLogs } = UseAuth();
     const navigate = useNavigate();
 
     const menuRef = useRef(null);
@@ -275,9 +276,9 @@ export default function Header({ activePage, onNavigate }) {
                             className="relative cursor-pointer group focus:outline-none"
                         >
                             <img
-                                alt="Developer Profile"
+                                alt="Member Profile"
                                 className={`w-8 h-8 rounded-full border border-outline-variant/50 object-cover transition-all ${isUserMenuOpen ? "ring-2 ring-primary border-transparent" : "group-hover:border-primary/50"}`}
-                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpe-U1IsM7n6HnWSZfGEyuVVs9tWNb8afDazBDEVGBrHXCTmTXqDeJlpAwYHHF0A2fp-09h29iW6oap8_Q_X3v_PruqSSdLqt-NOcyOgNODotWG41n3uSeHFkxoht8eyO52Ga8q_LQ-C4bNEFruf7_WyBFcBpncDDE22MiI4XUPxiNshlm8M4hzjAe-uT5UI33usMMxeQ7yGSAmkRcR74CbQuXNqxOk8t4ZNpPmnbnjZ4bIUyHqWeXNtqjPh5YLZw_qGTzSFO9bq8"
+                                src={decodeURIComponent(memberInfo?.avatar)}
                                 referrerPolicy="no-referrer"
                             />
                             <div
@@ -303,13 +304,18 @@ export default function Header({ activePage, onNavigate }) {
                                         </p>
                                     </div>
 
-                                    <button className="w-full flex items-center gap-3 px-4 py-2 text-sm text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors text-left font-sans cursor-pointer">
-                                        <User className="w-4 h-4" /> Account
-                                        Settings
+                                    <button
+                                    onClick={() => {
+                                        setIsUserMenuOpen(false);
+                                        reloadMemberInfo();
+                                    }}
+                                    className="w-full flex items-center gap-3 px-4 py-2 text-sm text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors text-left font-sans cursor-pointer">
+                                        <CloudDownload className="w-4 h-4" /> Account Reload
                                     </button>
                                     <button
                                         onClick={() => {
                                             setIsUserMenuOpen(false);
+                                            reloadSecurityLogs();
                                             onNavigate("security-logs");
                                         }}
                                         className="w-full flex items-center gap-3 px-4 py-2 text-sm text-on-surface-variant hover:text-primary hover:bg-primary/5 transition-colors text-left font-sans cursor-pointer"

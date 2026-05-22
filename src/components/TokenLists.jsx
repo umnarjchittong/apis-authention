@@ -231,7 +231,7 @@ export default function TokenLists() {
                                 filter={keyFilter}
                                 tokens={memberInfo?.tokens || []}
                                 handleTokenCount={(count) =>
-                                    setTokenCount(count)
+                                    setTokenCount(count || 0)
                                 }
                             />
                         )}
